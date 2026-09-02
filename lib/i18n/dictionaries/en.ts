@@ -42,6 +42,8 @@ const en = {
     invite: "Invite:",
     copied: "Copied!",
     copyInviteLink: "Copy invite link",
+    copyFailed: "Couldn't copy",
+    copyFailedFallback: "Copy this link manually:",
   },
   group: {
     members: (n: number) => `${n} member${n === 1 ? "" : "s"}`,

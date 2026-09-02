@@ -56,6 +56,8 @@ const he = {
     invite: "הזמנה:",
     copied: "הועתק!",
     copyInviteLink: "העתקת קישור הזמנה",
+    copyFailed: "ההעתקה נכשלה",
+    copyFailedFallback: "העתיקו את הקישור ידנית:",
   },
   group: {
     members: membersHe,
