@@ -14,13 +14,18 @@ export async function signInWithGoogle(formData: FormData) {
   const proto = headerList.get("x-forwarded-proto") ?? "http";
   const host = headerList.get("x-forwarded-host") ?? headerList.get("host");
   const origin = `${proto}://${host}`;
+  const redirectTo = `${origin}/auth/callback${
+    // Supabase's redirect URL allow-list only matches the bare callback URL,
+    // so appending a query string (even the harmless default `next=/`) makes
+    // an otherwise-allowed redirectTo fail validation and silently fall back
+    // to the Site URL instead. Only append when next is a real destination.
+    typeof next === "string" && next && next !== "/" ? `?next=${encodeURIComponent(next)}` : ""
+  }`;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${origin}/auth/callback${
-        typeof next === "string" && next ? `?next=${encodeURIComponent(next)}` : ""
-      }`,
+      redirectTo,
     },
   });
   if (error || !data.url) {
