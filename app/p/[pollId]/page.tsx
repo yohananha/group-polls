@@ -6,6 +6,8 @@ import { PollTypeBadge } from "@/components/poll/PollTypeBadge";
 import { PollDetailClient } from "@/components/poll/PollDetailClient";
 import { AuthorControls } from "@/components/poll/AuthorControls";
 import { ApproveOptionButton } from "@/components/poll/ApproveOptionButton";
+import { SharePollButton } from "@/components/poll/SharePollButton";
+import { PollJoinPrompt } from "@/components/poll/PollJoinPrompt";
 import { getT } from "@/lib/i18n/server";
 import type { PollSettings, PollStatus, PollType } from "@/lib/supabase/types";
 import type { ResultRow } from "@/components/poll/ResultsPanel";
@@ -21,15 +23,18 @@ interface PollRow {
   status: PollStatus;
   created_at: string;
   author: { display_name: string } | null;
-  group: { slug: string; name: string } | null;
+  group: { slug: string; name: string; invite_code: string } | null;
 }
 
 export default async function PollPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ pollId: string }>;
+  searchParams: Promise<{ code?: string }>;
 }) {
   const { pollId } = await params;
+  const { code } = await searchParams;
   const supabase = await createClient();
   const { locale, t } = await getT();
 
@@ -41,12 +46,36 @@ export default async function PollPage({
   const { data: pollRaw } = await supabase
     .from("polls")
     .select(
-      "id, group_id, author_id, question, description, type, settings, status, created_at, author:profiles(display_name), group:groups(slug, name)"
+      "id, group_id, author_id, question, description, type, settings, status, created_at, author:profiles(display_name), group:groups(slug, name, invite_code)"
     )
     .eq("id", pollId)
     .single();
 
-  if (!pollRaw) notFound();
+  // RLS returns nothing for a poll in a group you're not a member of. A
+  // share link (see SharePollButton) carries the group's invite code so we
+  // can offer a join prompt instead of a flat 404 — but only once the code
+  // is confirmed to actually match this poll's group.
+  if (!pollRaw) {
+    if (code) {
+      const { data: preview } = await supabase
+        .rpc("preview_poll_by_code", { p_poll_id: pollId, p_code: code })
+        .maybeSingle();
+      if (preview) {
+        return (
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="mx-auto flex w-full max-w-sm flex-1 flex-col items-center justify-center gap-4 px-4 text-center">
+              <p className="text-sm text-neutral-500">{t.sharePoll.invitedToPollIn}</p>
+              <h1 className="text-2xl font-semibold">{preview.group_name}</h1>
+              <p className="text-sm text-neutral-500">&ldquo;{preview.question}&rdquo;</p>
+              <PollJoinPrompt pollId={pollId} code={code} />
+            </main>
+          </div>
+        );
+      }
+    }
+    notFound();
+  }
   const poll = pollRaw as unknown as PollRow;
 
   const { data: optionsRaw } = await supabase
@@ -126,9 +155,12 @@ export default async function PollPage({
               {new Date(poll.created_at).toLocaleDateString(locale === "he" ? "he-IL" : "en-US")}
               {poll.status === "closed" && ` · ${t.common.closed}`}
             </p>
-            {isAuthor && (
-              <AuthorControls pollId={poll.id} groupSlug={poll.group?.slug ?? ""} status={poll.status} />
-            )}
+            <div className="flex items-center gap-3">
+              {poll.group && <SharePollButton pollId={poll.id} inviteCode={poll.group.invite_code} />}
+              {isAuthor && (
+                <AuthorControls pollId={poll.id} groupSlug={poll.group?.slug ?? ""} status={poll.status} />
+              )}
+            </div>
           </div>
         </div>
 

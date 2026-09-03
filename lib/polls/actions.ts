@@ -195,3 +195,19 @@ export async function deletePoll(pollId: string, groupSlug: string): Promise<Act
 
   redirect(`/g/${groupSlug}`);
 }
+
+/** Confirms the join step for a poll's direct share link (see the ?code
+ * handling in app/p/[pollId]/page.tsx). The code was already checked against
+ * this poll's group via preview_poll_by_code before this form was shown, so
+ * a failure here just means it was revoked or changed in the meantime. */
+export async function joinGroupForPoll(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+  const { t } = await getT();
+  const pollId = String(formData.get("poll_id") ?? "");
+  const code = String(formData.get("code") ?? "");
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("join_group_by_code", { p_code: code });
+  if (error) return { error: t.errors.codeDoesNotMatch };
+
+  redirect(`/p/${pollId}`);
+}
