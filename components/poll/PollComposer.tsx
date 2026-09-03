@@ -92,7 +92,7 @@ function Toggle({
   onChange?: (checked: boolean) => void;
 }) {
   return (
-    <label className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rtl:rotate-180">
+    <label dir="ltr" className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center">
       <input
         type="checkbox"
         name={name}
