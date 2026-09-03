@@ -16,13 +16,13 @@ export function JoinGroupForm() {
         name="code"
         placeholder={t.joinGroupForm.placeholder}
         required
-        className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+        className="w-full rounded-2xl border-2 border-border bg-card px-3.5 py-2.5 text-sm font-bold text-ink placeholder:text-muted-2"
       />
-      {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
+      {state?.error && <p className="text-sm font-bold text-danger">{state.error}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium disabled:opacity-50 dark:border-neutral-700"
+        className="w-full rounded-2xl border-2 border-border bg-card px-3 py-2.5 font-display text-sm font-bold text-ink transition hover:border-accent disabled:opacity-50"
       >
         {pending ? t.joinGroupForm.joining : t.joinGroupForm.submit}
       </button>

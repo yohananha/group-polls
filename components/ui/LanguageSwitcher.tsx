@@ -20,16 +20,14 @@ export function LanguageSwitcher({ current }: { current: Locale }) {
   }
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-neutral-300 p-0.5 text-xs dark:border-neutral-700">
+    <div className="flex items-center gap-1 rounded-full border-2 border-border bg-surface p-0.5 font-display text-xs">
       <button
         type="button"
         onClick={() => choose("en")}
         disabled={pending}
         aria-pressed={current === "en"}
-        className={`rounded-full px-2 py-0.5 font-medium transition disabled:opacity-50 ${
-          current === "en"
-            ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
-            : "text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200"
+        className={`rounded-full px-2 py-0.5 font-semibold transition disabled:opacity-50 ${
+          current === "en" ? "bg-ink text-card" : "text-muted hover:text-ink"
         }`}
       >
         {t.languageSwitcher.en}
@@ -39,10 +37,8 @@ export function LanguageSwitcher({ current }: { current: Locale }) {
         onClick={() => choose("he")}
         disabled={pending}
         aria-pressed={current === "he"}
-        className={`rounded-full px-2 py-0.5 font-medium transition disabled:opacity-50 ${
-          current === "he"
-            ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
-            : "text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200"
+        className={`rounded-full px-2 py-0.5 font-semibold transition disabled:opacity-50 ${
+          current === "he" ? "bg-ink text-card" : "text-muted hover:text-ink"
         }`}
       >
         {t.languageSwitcher.he}

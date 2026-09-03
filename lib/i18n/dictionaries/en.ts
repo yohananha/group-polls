@@ -1,8 +1,10 @@
 const en = {
   common: {
     someone: "Someone",
+    open: "Open",
     closed: "Closed",
     back: "Back",
+    cancel: "Cancel",
   },
   languageSwitcher: {
     en: "English",
@@ -19,10 +21,13 @@ const en = {
     signInWithGoogle: "Sign in with Google",
   },
   home: {
+    hey: (name: string) => `Hey ${name}`,
     yourGroups: "Your groups",
     noGroupsYet: "You're not in any groups yet — create one or join with an invite code.",
     startNewGroup: "Start a new group",
     joinWithInviteCode: "Join with an invite code",
+    groupSubtitle: (members: number, openPolls: number) =>
+      `${members} ${members === 1 ? "person" : "people"} · ${openPolls} open poll${openPolls === 1 ? "" : "s"}`,
   },
   createGroupForm: {
     namePlaceholder: "e.g. Friday Night Crew",
@@ -71,6 +76,7 @@ const en = {
     questionPlaceholder: "Who wins in a fight: Dana or Max?",
     description: "Description",
     optional: "(optional)",
+    pollColor: "Poll color",
     options: "Options",
     minFour: "(min 4)",
     addOption: "+ Add option",
@@ -107,6 +113,7 @@ const en = {
     hiddenUntilClose: "Results are hidden until this poll closes.",
     closePoll: "Close poll",
     deletePoll: "Delete poll",
+    deleting: "Deleting…",
     deleteConfirm: "Delete this poll for everyone? This can't be undone.",
   },
   vote: {

@@ -11,13 +11,13 @@ export function JoinConfirmButton({ code }: { code: string }) {
   const { t } = useI18n();
 
   return (
-    <form action={formAction}>
+    <form action={formAction} className="w-full">
       <input type="hidden" name="code" value={code} />
-      {state?.error && <p className="mb-2 text-sm text-red-600">{state.error}</p>}
+      {state?.error && <p className="mb-2 text-sm font-bold text-danger">{state.error}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
+        className="w-full rounded-[18px] bg-ink px-5 py-4 font-display text-sm font-bold text-card transition hover:opacity-90 disabled:opacity-50"
       >
         {pending ? t.joinGroupForm.joining : t.joinGroupForm.submit}
       </button>

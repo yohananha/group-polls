@@ -23,6 +23,10 @@ export interface PollSettings {
   max_picks?: number;
   min_picks?: number;
   top_n?: number;
+  /** Hex color (e.g. "#E8623D") the poll's author picked to display this
+   * poll's selection highlight and results bars with. Optional — older
+   * polls fall back to the app's default accent. */
+  color?: string;
 }
 
 export interface Database {

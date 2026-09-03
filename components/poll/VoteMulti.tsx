@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { castBallot } from "@/lib/polls/actions";
 import { useI18n } from "@/lib/i18n/client";
+import { tintColor } from "@/lib/polls/color";
 
 interface Option {
   id: string;
@@ -19,6 +20,7 @@ export function VoteMulti({
   allowChange,
   disabled,
   onVoted,
+  color,
 }: {
   pollId: string;
   options: Option[];
@@ -28,6 +30,7 @@ export function VoteMulti({
   allowChange: boolean;
   disabled: boolean;
   onVoted: () => void;
+  color: string;
 }) {
   const { t } = useI18n();
   const hasVoted = myOptionIds.length > 0;
@@ -66,7 +69,7 @@ export function VoteMulti({
 
   return (
     <div className="space-y-2">
-      <p className="text-xs text-neutral-400">
+      <p className="text-xs font-bold text-muted">
         {t.vote.pickRange(minPicks, maxPicks)} · {t.vote.selected(selected.size)}
       </p>
       {options
@@ -77,30 +80,27 @@ export function VoteMulti({
             type="button"
             disabled={locked}
             onClick={() => toggle(o.id)}
-            className={`flex w-full items-center justify-between rounded-lg border px-4 py-2.5 text-start text-sm transition disabled:cursor-not-allowed ${
-              selected.has(o.id)
-                ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
-                : "border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-900"
+            style={selected.has(o.id) ? { borderColor: color, backgroundColor: tintColor(color) } : undefined}
+            className={`flex w-full items-center justify-between rounded-2xl border-2 px-4 py-3.5 text-start text-sm font-bold text-ink transition disabled:cursor-not-allowed ${
+              selected.has(o.id) ? "" : "border-border bg-surface"
             }`}
           >
-            {o.label}
+            <span>{o.label}</span>
             {selected.has(o.id) && <span>✓</span>}
           </button>
         ))}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm font-bold text-danger">{error}</p>}
       {!locked && (
         <button
           type="button"
           onClick={submit}
           disabled={pending || selected.size < minPicks}
-          className="mt-2 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
+          className="mt-2 w-full rounded-2xl bg-ink px-4 py-3.5 font-display text-sm font-bold text-card transition hover:opacity-90 disabled:opacity-50"
         >
           {pending ? t.vote.saving : hasVoted ? t.vote.update : t.vote.submit}
         </button>
       )}
-      {hasVoted && !allowChange && (
-        <p className="text-xs text-neutral-400">{t.pollDetail.votedNoChange}</p>
-      )}
+      {hasVoted && !allowChange && <p className="text-xs font-bold text-muted-2">{t.pollDetail.votedNoChange}</p>}
     </div>
   );
 }

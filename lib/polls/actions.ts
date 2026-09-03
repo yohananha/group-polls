@@ -25,12 +25,14 @@ export async function createPoll(
 ): Promise<ActionResult> {
   const { t } = await getT();
   const rawOptions = formData.getAll("option").map((v) => String(v));
+  const rawColor = formData.get("color");
   const settings: PollSettings = {
     allow_option_adds: formData.get("allow_option_adds") === "on",
     option_adds_need_approval: formData.get("option_adds_need_approval") === "on",
     allow_vote_change: formData.get("allow_vote_change") === "on",
     anonymous: formData.get("anonymous") === "on",
     results_visibility: (formData.get("results_visibility") as PollSettings["results_visibility"]) ?? "always",
+    ...(typeof rawColor === "string" && rawColor ? { color: rawColor } : {}),
     ...(type === "multi"
       ? {
           min_picks: Number(formData.get("min_picks") ?? 1),

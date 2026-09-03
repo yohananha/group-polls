@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 import { canSeeResults } from "@/lib/polls/visibility";
+import { DEFAULT_POLL_COLOR } from "@/lib/polls/color";
 import type { PollSettings, PollStatus, PollType } from "@/lib/supabase/types";
 import { VoteSingle } from "@/components/poll/VoteSingle";
 import { VoteMulti } from "@/components/poll/VoteMulti";
@@ -139,6 +140,7 @@ export function PollDetailClient(props: PollDetailClientProps) {
   }
 
   const disabled = status === "closed";
+  const color = settings.color ?? DEFAULT_POLL_COLOR;
   const resultsVisible = canSeeResults(settings, hasVoted, status === "closed");
   const hiddenReason =
     settings.results_visibility === "after_vote"
@@ -150,6 +152,18 @@ export function PollDetailClient(props: PollDetailClientProps) {
   return (
     <div className="space-y-6">
       <section>
+        <h2 className="mb-2.5 font-display text-sm font-bold text-ink">{t.pollDetail.results}</h2>
+        <ResultsPanel
+          results={results}
+          type={type}
+          hidden={!resultsVisible}
+          hiddenReason={hiddenReason}
+          votersByOption={voters}
+          color={color}
+        />
+      </section>
+
+      <section>
         {type === "single" && (
           <VoteSingle
             pollId={pollId}
@@ -158,6 +172,7 @@ export function PollDetailClient(props: PollDetailClientProps) {
             allowChange={!!settings.allow_vote_change}
             disabled={disabled}
             onVoted={handleVoted}
+            color={color}
           />
         )}
         {type === "multi" && (
@@ -170,6 +185,7 @@ export function PollDetailClient(props: PollDetailClientProps) {
             allowChange={!!settings.allow_vote_change}
             disabled={disabled}
             onVoted={handleVoted}
+            color={color}
           />
         )}
         {type === "rank" && (
@@ -204,17 +220,6 @@ export function PollDetailClient(props: PollDetailClientProps) {
       {settings.allow_option_adds && !disabled && (
         <AddOptionForm pollId={pollId} needsApproval={!!settings.option_adds_need_approval} />
       )}
-
-      <section>
-        <h2 className="mb-2 text-sm font-semibold text-neutral-500">{t.pollDetail.results}</h2>
-        <ResultsPanel
-          results={results}
-          type={type}
-          hidden={!resultsVisible}
-          hiddenReason={hiddenReason}
-          votersByOption={voters}
-        />
-      </section>
     </div>
   );
 }

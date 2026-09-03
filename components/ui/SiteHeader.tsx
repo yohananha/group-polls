@@ -25,9 +25,9 @@ export async function SiteHeader() {
   }
 
   return (
-    <header className="border-b border-neutral-200 dark:border-neutral-800">
+    <header className="border-b-2 border-border bg-card">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-        <Link href="/" className="text-sm font-semibold tracking-tight">
+        <Link href="/" className="font-display text-base font-semibold tracking-tight text-ink">
           {t.header.brand}
         </Link>
         <div className="flex items-center gap-3">
@@ -41,18 +41,16 @@ export async function SiteHeader() {
                     alt=""
                     width={24}
                     height={24}
-                    className="rounded-full"
+                    className="rounded-full border-2 border-border"
                     unoptimized
                   />
                 )}
-                <span className="text-sm text-neutral-600 dark:text-neutral-300">
-                  {displayName}
-                </span>
+                <span className="text-sm font-bold text-ink">{displayName}</span>
               </div>
               <form action={signOut}>
                 <button
                   type="submit"
-                  className="text-sm text-neutral-400 underline-offset-2 hover:text-neutral-600 hover:underline dark:hover:text-neutral-200"
+                  className="text-xs font-bold text-muted underline-offset-2 hover:text-ink hover:underline"
                 >
                   {t.header.signOut}
                 </button>

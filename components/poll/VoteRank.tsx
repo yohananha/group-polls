@@ -51,40 +51,26 @@ function RankRow({
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
+      className={`flex items-center gap-2.5 rounded-2xl border-2 px-3 py-2.5 text-sm font-bold ${
         isDragging ? "opacity-50" : ""
-      } ${
-        withinTopN
-          ? "border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900"
-          : "border-neutral-200 bg-neutral-50 text-neutral-400 dark:border-neutral-800 dark:bg-neutral-950"
-      }`}
+      } ${withinTopN ? "border-border bg-surface text-ink" : "border-border bg-card text-muted-2"}`}
     >
-      <span className="w-5 shrink-0 text-center text-xs font-semibold text-neutral-400">
+      <span className="w-5 shrink-0 text-center font-display text-sm font-bold text-danger">
         {withinTopN ? index + 1 : "–"}
       </span>
       <span className="flex-1">{option.label}</span>
       <div className="flex shrink-0 flex-col">
-        <button
-          type="button"
-          aria-label={t.vote.moveUp}
-          onClick={() => onMove(index, -1)}
-          className="px-1 text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-        >
+        <button type="button" aria-label={t.vote.moveUp} onClick={() => onMove(index, -1)} className="px-1 text-muted-2 hover:text-ink">
           ▲
         </button>
-        <button
-          type="button"
-          aria-label={t.vote.moveDown}
-          onClick={() => onMove(index, 1)}
-          className="px-1 text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-        >
+        <button type="button" aria-label={t.vote.moveDown} onClick={() => onMove(index, 1)} className="px-1 text-muted-2 hover:text-ink">
           ▼
         </button>
       </div>
       <button
         type="button"
         aria-label={t.vote.dragToReorder}
-        className="shrink-0 cursor-grab touch-none px-1 text-neutral-300 active:cursor-grabbing"
+        className="shrink-0 cursor-grab touch-none px-1 text-muted-2 active:cursor-grabbing"
         {...attributes}
         {...listeners}
       >
@@ -181,7 +167,7 @@ export function VoteRank({
 
   return (
     <div className="space-y-2">
-      {topN && <p className="text-xs text-neutral-400">{t.vote.onlyTopCount(topN)}</p>}
+      {topN && <p className="text-xs font-bold text-muted">{t.vote.onlyTopCount(topN)}</p>}
       <DndContext
         id={`rank-${pollId}`}
         sensors={sensors}
@@ -198,20 +184,18 @@ export function VoteRank({
           </ol>
         </SortableContext>
       </DndContext>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm font-bold text-danger">{error}</p>}
       {!locked && (
         <button
           type="button"
           onClick={submit}
           disabled={pending}
-          className="mt-2 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
+          className="mt-2 w-full rounded-2xl bg-ink px-4 py-3.5 font-display text-sm font-bold text-card transition hover:opacity-90 disabled:opacity-50"
         >
           {pending ? t.vote.saving : hasVoted ? t.vote.updateRanking : t.vote.submitRanking}
         </button>
       )}
-      {hasVoted && !allowChange && (
-        <p className="text-xs text-neutral-400">{t.pollDetail.votedNoChange}</p>
-      )}
+      {hasVoted && !allowChange && <p className="text-xs font-bold text-muted-2">{t.pollDetail.votedNoChange}</p>}
     </div>
   );
 }

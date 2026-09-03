@@ -16,13 +16,13 @@ export function CreateGroupForm() {
         name="name"
         placeholder={t.createGroupForm.namePlaceholder}
         required
-        className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+        className="w-full rounded-2xl border-2 border-border bg-surface px-3.5 py-2.5 text-sm font-bold text-ink placeholder:text-muted-2"
       />
-      {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
+      {state?.error && <p className="text-sm font-bold text-danger">{state.error}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
+        className="w-full rounded-2xl bg-ink px-3 py-2.5 font-display text-sm font-bold text-card transition hover:opacity-90 disabled:opacity-50"
       >
         {pending ? t.createGroupForm.creating : t.createGroupForm.submit}
       </button>

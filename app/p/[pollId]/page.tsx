@@ -104,42 +104,35 @@ export default async function PollPage({
       <SiteHeader />
       <main className="mx-auto w-full max-w-2xl flex-1 space-y-6 px-4 py-8">
         <div>
-          <Link
-            href={poll.group ? `/g/${poll.group.slug}` : "/"}
-            className="text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
-          >
+          <Link href={poll.group ? `/g/${poll.group.slug}` : "/"} className="text-xs font-bold text-muted hover:text-ink">
             <span className="inline-block rtl:scale-x-[-1]" aria-hidden="true">
               ←
             </span>{" "}
             {poll.group?.name ?? t.common.back}
           </Link>
-          <div className="mt-2 flex items-start justify-between gap-3">
-            <h1 className="text-xl font-semibold">{poll.question}</h1>
+          <div className="mt-2.5 flex items-start justify-between gap-3">
             <PollTypeBadge type={poll.type} />
-          </div>
-          {poll.description && (
-            <p className="mt-1 text-sm text-neutral-500">{poll.description}</p>
-          )}
-          <div className="mt-2 flex items-center justify-between">
-            <p className="text-xs text-neutral-400">
-              {poll.author?.display_name ?? t.common.someone} ·{" "}
-              {new Date(poll.created_at).toLocaleDateString(locale === "he" ? "he-IL" : "en-US")}
-              {poll.status === "closed" && ` · ${t.common.closed}`}
-            </p>
             {isAuthor && (
               <AuthorControls pollId={poll.id} groupSlug={poll.group?.slug ?? ""} status={poll.status} />
             )}
           </div>
+          <h1 className="mt-2.5 font-display text-xl font-bold leading-snug text-ink">{poll.question}</h1>
+          {poll.description && (
+            <p className="mt-1.5 text-sm font-bold italic text-muted">{poll.description}</p>
+          )}
+          <p className="mt-2.5 text-xs font-bold text-muted-2">
+            {poll.author?.display_name ?? t.common.someone} ·{" "}
+            {new Date(poll.created_at).toLocaleDateString(locale === "he" ? "he-IL" : "en-US")}
+            {poll.status === "closed" && ` · ${t.common.closed}`}
+          </p>
         </div>
 
         {isAuthor && pendingOptions.length > 0 && (
-          <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 dark:border-amber-900 dark:bg-amber-950">
-            <p className="mb-2 text-xs font-medium text-amber-800 dark:text-amber-300">
-              {t.pollDetail.pendingApproval}
-            </p>
+          <div className="rounded-2xl border-2 border-border bg-type-rank-bg p-3.5">
+            <p className="mb-2 font-display text-xs font-bold text-type-rank-fg">{t.pollDetail.pendingApproval}</p>
             <ul className="space-y-1.5">
               {pendingOptions.map((o) => (
-                <li key={o.id} className="flex items-center justify-between text-sm">
+                <li key={o.id} className="flex items-center justify-between text-sm font-bold text-ink">
                   <span>{o.label}</span>
                   <ApproveOptionButton optionId={o.id} pollId={poll.id} />
                 </li>

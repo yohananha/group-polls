@@ -17,6 +17,7 @@ export function ResultsPanel({
   hidden,
   hiddenReason,
   votersByOption,
+  color,
 }: {
   results: ResultRow[];
   type: PollType;
@@ -25,45 +26,47 @@ export function ResultsPanel({
   /** option_id -> display names, only populated for non-anonymous polls
    * (see get_poll_voters in supabase/migrations/0003_functions.sql). */
   votersByOption?: Record<string, string[]>;
+  /** The poll author's chosen color (lib/polls/color.ts) — fills the bars. */
+  color: string;
 }) {
   const { t } = useI18n();
 
   if (hidden) {
     return (
-      <div className="rounded-xl border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500 dark:border-neutral-700">
+      <div className="rounded-2xl border-2 border-dashed border-border bg-surface p-6 text-center text-sm font-bold text-muted">
         {hiddenReason ?? t.results.resultsHiddenDefault}
       </div>
     );
   }
 
   if (results.length === 0) {
-    return <p className="text-sm text-neutral-500">{t.results.noResultsYet}</p>;
+    return <p className="text-sm font-bold text-muted">{t.results.noResultsYet}</p>;
   }
 
   const max = Math.max(...results.map((r) => r.score), 1);
   const isBracket = type === "bracket";
 
   return (
-    <ol className="space-y-2">
+    <ol className="space-y-3.5">
       {results.map((r, i) => (
         <li key={r.option_id}>
           <div className="flex items-baseline justify-between text-sm">
-            <span className="font-medium">
-              {isBracket && <span className="me-1.5 text-neutral-400">#{i + 1}</span>}
+            <span className="font-bold text-ink">
+              {isBracket && <span className="me-1.5 text-faint">#{i + 1}</span>}
               {r.label}
             </span>
-            <span className="tabular-nums text-neutral-500">
+            <span className="font-bold tabular-nums text-muted">
               {isBracket ? t.results.rating(Math.round(r.score)) : t.results.votes(r.votes)}
             </span>
           </div>
-          <div className="mt-1 h-2 overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800">
+          <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-border">
             <div
-              className="h-full rounded-full bg-neutral-900 transition-all dark:bg-white"
-              style={{ width: `${Math.max((r.score / max) * 100, r.score > 0 ? 3 : 0)}%` }}
+              className="h-full rounded-full transition-all"
+              style={{ width: `${Math.max((r.score / max) * 100, r.score > 0 ? 3 : 0)}%`, backgroundColor: color }}
             />
           </div>
           {votersByOption?.[r.option_id] && votersByOption[r.option_id].length > 0 && (
-            <p className="mt-1 truncate text-xs text-neutral-400">
+            <p className="mt-1 truncate text-xs font-semibold text-muted-2">
               {votersByOption[r.option_id].join(", ")}
             </p>
           )}

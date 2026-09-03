@@ -19,10 +19,10 @@ export default async function JoinPage({
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-sm flex-1 flex-col items-center justify-center gap-4 px-4 text-center">
-        <p className="text-sm text-neutral-500">{t.joinPage.invitedTo}</p>
-        <h1 className="text-2xl font-semibold">{data.name}</h1>
-        <p className="text-sm text-neutral-500">{t.joinPage.members(data.member_count)}</p>
+      <main className="mx-auto flex w-full max-w-sm flex-1 flex-col items-center justify-center gap-3.5 px-4 text-center">
+        <p className="font-display text-xl font-bold text-ink">{t.joinPage.invitedTo}</p>
+        <h1 className="font-display text-3xl font-bold text-ink">{data.name}</h1>
+        <p className="mb-4 text-sm font-bold text-muted">{t.joinPage.members(data.member_count)}</p>
         <JoinConfirmButton code={code} />
       </main>
     </div>

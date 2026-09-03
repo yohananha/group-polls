@@ -45,15 +45,16 @@ export function InviteLink({ inviteCode }: { inviteCode: string }) {
   }
 
   return (
-    <div className="rounded-xl border border-dashed border-neutral-300 px-4 py-2.5 text-sm dark:border-neutral-700">
+    <div className="rounded-2xl border-2 border-border bg-surface px-4 py-3 text-sm">
       <div className="flex items-center justify-between gap-3">
-        <span className="truncate text-neutral-500">
-          {t.inviteLink.invite} <code className="text-neutral-700 dark:text-neutral-300">{inviteCode}</code>
+        <span className="truncate font-bold text-muted">
+          {t.inviteLink.invite}{" "}
+          <span className="font-display font-bold tracking-widest text-ink">{inviteCode}</span>
         </span>
         <button
           type="button"
           onClick={handleCopy}
-          className="shrink-0 rounded-md border border-neutral-300 px-2.5 py-1 text-xs font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+          className="shrink-0 rounded-full bg-accent-soft px-3 py-1.5 font-display text-xs font-bold text-accent transition hover:opacity-90"
         >
           {status === "copied"
             ? t.inviteLink.copied
@@ -63,9 +64,9 @@ export function InviteLink({ inviteCode }: { inviteCode: string }) {
         </button>
       </div>
       {status === "failed" && href && (
-        <p className="mt-2 text-xs text-red-600 dark:text-red-400">
+        <p className="mt-2 text-xs font-bold text-danger">
           {t.inviteLink.copyFailedFallback}{" "}
-          <span className="select-all break-all text-neutral-700 dark:text-neutral-300">{href}</span>
+          <span className="select-all break-all text-ink">{href}</span>
         </p>
       )}
     </div>

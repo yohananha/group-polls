@@ -10,6 +10,10 @@ const baseSettings = z.object({
   allow_vote_change: z.boolean().default(true),
   anonymous: z.boolean().default(false),
   results_visibility: z.enum(["always", "after_vote", "after_close"]).default("always"),
+  color: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/)
+    .optional(),
 });
 
 const singleSettings = baseSettings;

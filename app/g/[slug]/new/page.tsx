@@ -25,7 +25,7 @@ export default async function NewPollPage({
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-8">
-        <h1 className="text-xl font-semibold">{t.newPollPage.title(group.name)}</h1>
+        <h1 className="font-display text-2xl font-bold text-ink">{t.newPollPage.title(group.name)}</h1>
         <PollComposer groupId={group.id} />
       </main>
     </div>

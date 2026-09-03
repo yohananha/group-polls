@@ -15,8 +15,10 @@ function votesHe(n: number): string {
 const he = {
   common: {
     someone: "מישהו",
+    open: "פתוח",
     closed: "סגור",
     back: "חזרה",
+    cancel: "ביטול",
   },
   languageSwitcher: {
     en: "English",
@@ -33,10 +35,13 @@ const he = {
     signInWithGoogle: "התחברות עם Google",
   },
   home: {
+    hey: (name: string) => `היי ${name}`,
     yourGroups: "הקבוצות שלך",
     noGroupsYet: "אתם לא חברים באף קבוצה עדיין — צרו קבוצה חדשה או הצטרפו עם קוד הזמנה.",
     startNewGroup: "התחלת קבוצה חדשה",
     joinWithInviteCode: "הצטרפות עם קוד הזמנה",
+    groupSubtitle: (members: number, openPolls: number) =>
+      `${membersHe(members)} · ${openPolls === 0 ? "אין סקרים פתוחים" : openPolls === 1 ? "סקר פתוח אחד" : `${openPolls} סקרים פתוחים`}`,
   },
   createGroupForm: {
     namePlaceholder: "למשל: חבורת שישי בערב",
@@ -85,6 +90,7 @@ const he = {
     questionPlaceholder: "מי ינצח בקרב: דנה או מקס?",
     description: "תיאור",
     optional: "(אופציונלי)",
+    pollColor: "צבע הסקר",
     options: "אפשרויות",
     minFour: "(מינימום 4)",
     addOption: "+ הוספת אפשרות",
@@ -121,6 +127,7 @@ const he = {
     hiddenUntilClose: "התוצאות מוסתרות עד שהסקר ייסגר.",
     closePoll: "סגירת הסקר",
     deletePoll: "מחיקת הסקר",
+    deleting: "מוחק…",
     deleteConfirm: "למחוק את הסקר הזה לכולם? לא ניתן לבטל פעולה זו.",
   },
   vote: {

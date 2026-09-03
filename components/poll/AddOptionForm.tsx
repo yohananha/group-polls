@@ -11,7 +11,7 @@ export function AddOptionForm({ pollId, needsApproval }: { pollId: string; needs
   const { t } = useI18n();
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1.5">
       <form action={formAction} className="flex items-center gap-2">
         <input type="hidden" name="poll_id" value={pollId} />
         <input
@@ -19,20 +19,18 @@ export function AddOptionForm({ pollId, needsApproval }: { pollId: string; needs
           required
           maxLength={200}
           placeholder={t.pollDetail.addOptionPlaceholder}
-          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+          className="w-full rounded-2xl border-2 border-border bg-surface px-3.5 py-2.5 text-sm font-bold text-ink placeholder:text-muted-2"
         />
         <button
           type="submit"
           disabled={pending}
-          className="shrink-0 rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium disabled:opacity-50 dark:border-neutral-700"
+          className="shrink-0 rounded-2xl border-2 border-border bg-surface px-3.5 py-2.5 font-display text-sm font-bold text-ink transition hover:border-accent disabled:opacity-50"
         >
           {pending ? t.pollDetail.adding : t.pollDetail.add}
         </button>
       </form>
-      {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
-      {needsApproval && (
-        <p className="text-xs text-neutral-400">{t.pollDetail.needsApprovalNote}</p>
-      )}
+      {state?.error && <p className="text-sm font-bold text-danger">{state.error}</p>}
+      {needsApproval && <p className="text-xs font-bold text-muted-2">{t.pollDetail.needsApprovalNote}</p>}
     </div>
   );
 }

@@ -20,7 +20,7 @@ export function ApproveOptionButton({ optionId, pollId }: { optionId: string; po
           router.refresh();
         })
       }
-      className="rounded-md border border-amber-300 px-2 py-0.5 text-xs font-medium text-amber-800 hover:bg-amber-100 disabled:opacity-50 dark:border-amber-800 dark:text-amber-300 dark:hover:bg-amber-900"
+      className="rounded-full bg-type-rank-bg px-2.5 py-1 font-display text-xs font-bold text-type-rank-fg transition hover:opacity-80 disabled:opacity-50"
     >
       {pending ? t.pollDetail.approving : t.pollDetail.approve}
     </button>

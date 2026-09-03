@@ -11,28 +11,35 @@ export default async function LoginPage({
   const { locale, t } = await getT();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4 dark:bg-neutral-950">
-      <div className="w-full max-w-sm space-y-6 rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+    <div className="flex min-h-screen items-center justify-center bg-bg px-4">
+      <div className="w-full max-w-sm space-y-8 rounded-[26px] border-2 border-border bg-card p-8 shadow-[0_30px_60px_-20px_rgba(43,33,24,0.28)]">
         <div className="flex justify-center">
           <LanguageSwitcher current={locale} />
         </div>
 
-        <div className="space-y-1 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">{t.login.title}</h1>
-          <p className="text-sm text-neutral-500">{t.login.subtitle}</p>
+        <div className="flex flex-col items-center gap-4 text-center">
+          <div className="flex h-[84px] w-[84px] items-center justify-center rounded-[26px] bg-accent font-display text-3xl font-bold text-ink">
+            GP
+          </div>
+          <div>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-ink">{t.login.title}</h1>
+            <p className="mt-2.5 max-w-[250px] text-sm font-bold leading-snug text-muted">
+              {t.login.subtitle}
+            </p>
+          </div>
         </div>
 
         {error && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+          <p className="rounded-2xl bg-accent-soft px-3 py-2 text-center text-sm font-bold text-accent">
             {t.login.error}
           </p>
         )}
 
-        <form action={signInWithGoogle}>
+        <form action={signInWithGoogle} className="space-y-2.5">
           <input type="hidden" name="next" value={next ?? "/"} />
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-neutral-800 shadow-sm transition hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700"
+            className="flex w-full items-center justify-center gap-2 rounded-[18px] bg-ink px-4 py-4 font-display text-sm font-bold text-card transition hover:opacity-90"
           >
             <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
               <path

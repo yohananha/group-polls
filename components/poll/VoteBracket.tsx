@@ -64,12 +64,12 @@ export function VoteBracket({
   }
 
   if (disabled) {
-    return <p className="text-sm text-neutral-500">{t.vote.thisPollClosed}</p>;
+    return <p className="text-sm font-bold text-muted">{t.vote.thisPollClosed}</p>;
   }
 
   if (!matchup) {
     return (
-      <div className="rounded-xl border border-dashed border-neutral-300 p-6 text-center text-sm text-neutral-500 dark:border-neutral-700">
+      <div className="rounded-2xl border-2 border-dashed border-border bg-surface p-6 text-center text-sm font-bold text-muted">
         {t.vote.judgedAllPairs}
       </div>
     );
@@ -81,7 +81,7 @@ export function VoteBracket({
 
   return (
     <div className="space-y-3">
-      <p className="text-center text-xs text-neutral-400">{t.vote.whichWins}</p>
+      <p className="text-center text-xs font-bold text-muted">{t.vote.whichWins}</p>
       <div className="grid grid-cols-2 gap-3">
         {[a, b].map((opt) => (
           <button
@@ -89,7 +89,7 @@ export function VoteBracket({
             type="button"
             disabled={pending}
             onClick={() => choose(opt.id)}
-            className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-xl border border-neutral-300 p-4 text-center text-sm font-medium transition hover:border-neutral-900 hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-700 dark:hover:border-white dark:hover:bg-neutral-900"
+            className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-border bg-surface p-4 text-center text-sm font-bold text-ink transition hover:border-accent disabled:opacity-50"
           >
             {opt.image_url && (
               // eslint-disable-next-line @next/next/no-img-element
@@ -99,7 +99,7 @@ export function VoteBracket({
           </button>
         ))}
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm font-bold text-danger">{error}</p>}
     </div>
   );
 }
