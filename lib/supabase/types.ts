@@ -202,6 +202,10 @@ export interface Database {
         Args: { p_poll_id: string };
         Returns: { option_id: string; voter_name: string }[];
       };
+      preview_poll_by_code: {
+        Args: { p_poll_id: string; p_code: string };
+        Returns: { question: string; group_name: string; group_slug: string }[];
+      };
     };
     Enums: {
       member_role: MemberRole;
