@@ -57,6 +57,10 @@ export function PollDetailClient(props: PollDetailClientProps) {
     type === "bracket" ? hasJudgedAny : myOptionIds.length > 0
   );
   const channelRef = useRef<RealtimeChannel | null>(null);
+  const optionIdsRef = useRef<Set<string>>(new Set(props.options.map((o) => o.id)));
+  useEffect(() => {
+    optionIdsRef.current = new Set(options.map((o) => o.id));
+  }, [options]);
 
   const refetchResults = useCallback(async () => {
     const supabase = createClient();
@@ -103,9 +107,23 @@ export function PollDetailClient(props: PollDetailClientProps) {
       const channel = supabase
         .channel(`poll-${pollId}`)
         .on(
+          // `ballots` rows are only readable by their own voter (RLS:
+          // voter_id = auth.uid()), so Realtime never delivers other
+          // people's ballot events to you — subscribing to it only ever
+          // catches your own vote. `ballot_entries` is readable by any
+          // group member once results_visibility allows it, which is the
+          // actual signal we want. It has no poll_id column, so the filter
+          // has to happen client-side against this poll's known option ids.
           "postgres_changes",
-          { event: "*", schema: "public", table: "ballots", filter: `poll_id=eq.${pollId}` },
-          refetchResults
+          { event: "*", schema: "public", table: "ballot_entries" },
+          (payload) => {
+            const changedOptionId =
+              (payload.new as { option_id?: string } | null)?.option_id ??
+              (payload.old as { option_id?: string } | null)?.option_id;
+            if (changedOptionId && optionIdsRef.current.has(changedOptionId)) {
+              refetchResults();
+            }
+          }
         )
         .on(
           "postgres_changes",
