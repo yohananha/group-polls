@@ -50,6 +50,15 @@ const en = {
     copyFailed: "Couldn't copy",
     copyFailedFallback: "Copy this link manually:",
   },
+  sharePoll: {
+    share: "Share poll",
+    copied: "Link copied!",
+    copyFailed: "Couldn't copy",
+    copyFailedFallback: "Copy this link manually:",
+    invitedToPollIn: "You've been invited to view a poll in",
+    joinToView: "Join & view poll",
+    joining: "Joining…",
+  },
   group: {
     members: (n: number) => `${n} member${n === 1 ? "" : "s"}`,
     newPoll: "New poll",

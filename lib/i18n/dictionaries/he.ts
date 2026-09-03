@@ -64,6 +64,15 @@ const he = {
     copyFailed: "ההעתקה נכשלה",
     copyFailedFallback: "העתיקו את הקישור ידנית:",
   },
+  sharePoll: {
+    share: "שיתוף הסקר",
+    copied: "הקישור הועתק!",
+    copyFailed: "ההעתקה נכשלה",
+    copyFailedFallback: "העתיקו את הקישור ידנית:",
+    invitedToPollIn: "הוזמנת לצפות בסקר בקבוצת",
+    joinToView: "הצטרפות וצפייה בסקר",
+    joining: "מצטרף…",
+  },
   group: {
     members: membersHe,
     newPoll: "סקר חדש",
