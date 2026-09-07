@@ -10,7 +10,7 @@ import { VoteSingle } from "@/components/poll/VoteSingle";
 import { VoteMulti } from "@/components/poll/VoteMulti";
 import { VoteRank } from "@/components/poll/VoteRank";
 import { VoteBracket } from "@/components/poll/VoteBracket";
-import { ResultsPanel, type ResultRow } from "@/components/poll/ResultsPanel";
+import { ResultsPanel, type ResultRow, type Turnout } from "@/components/poll/ResultsPanel";
 import { AddOptionForm } from "@/components/poll/AddOptionForm";
 import { useI18n } from "@/lib/i18n/client";
 
@@ -30,6 +30,7 @@ interface PollDetailClientProps {
   options: Option[];
   initialResults: ResultRow[];
   initialVoters: Record<string, string[]>;
+  initialTurnout: Turnout | null;
   myOptionIds: string[];
   myRanks: number[] | null;
   initialMatchup: { option_a_id: string; option_b_id: string } | null;
@@ -44,6 +45,7 @@ export function PollDetailClient(props: PollDetailClientProps) {
     status,
     initialResults,
     initialVoters,
+    initialTurnout,
     myOptionIds,
     myRanks,
     initialMatchup,
@@ -53,6 +55,7 @@ export function PollDetailClient(props: PollDetailClientProps) {
   const [options, setOptions] = useState(props.options);
   const [results, setResults] = useState(initialResults);
   const [voters, setVoters] = useState(initialVoters);
+  const [turnout, setTurnout] = useState(initialTurnout);
   const [hasVoted, setHasVoted] = useState(
     type === "bracket" ? hasJudgedAny : myOptionIds.length > 0
   );
@@ -64,11 +67,13 @@ export function PollDetailClient(props: PollDetailClientProps) {
 
   const refetchResults = useCallback(async () => {
     const supabase = createClient();
-    const [{ data }, { data: voterRows }] = await Promise.all([
+    const [{ data }, { data: voterRows }, { data: turnoutRows }] = await Promise.all([
       supabase.rpc("get_poll_results", { p_poll_id: pollId }),
       supabase.rpc("get_poll_voters", { p_poll_id: pollId }),
+      supabase.rpc("get_poll_turnout", { p_poll_id: pollId }),
     ]);
     if (data) setResults(data as ResultRow[]);
+    if (turnoutRows?.[0]) setTurnout(turnoutRows[0] as Turnout);
     if (voterRows) {
       const grouped: Record<string, string[]> = {};
       for (const row of voterRows) {
@@ -178,6 +183,7 @@ export function PollDetailClient(props: PollDetailClientProps) {
           hiddenReason={hiddenReason}
           votersByOption={voters}
           color={color}
+          turnout={turnout}
         />
       </section>
 

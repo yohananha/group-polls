@@ -10,7 +10,7 @@ import { SharePollButton } from "@/components/poll/SharePollButton";
 import { PollJoinPrompt } from "@/components/poll/PollJoinPrompt";
 import { getT } from "@/lib/i18n/server";
 import type { PollSettings, PollStatus, PollType } from "@/lib/supabase/types";
-import type { ResultRow } from "@/components/poll/ResultsPanel";
+import type { ResultRow, Turnout } from "@/components/poll/ResultsPanel";
 
 interface PollRow {
   id: string;
@@ -85,11 +85,13 @@ export default async function PollPage({
     .order("position", { ascending: true });
   const options = optionsRaw ?? [];
 
-  const [{ data: resultsRaw }, { data: voterRows }] = await Promise.all([
+  const [{ data: resultsRaw }, { data: voterRows }, { data: turnoutRows }] = await Promise.all([
     supabase.rpc("get_poll_results", { p_poll_id: pollId }),
     supabase.rpc("get_poll_voters", { p_poll_id: pollId }),
+    supabase.rpc("get_poll_turnout", { p_poll_id: pollId }),
   ]);
   const initialResults = (resultsRaw ?? []) as ResultRow[];
+  const initialTurnout = (turnoutRows?.[0] ?? null) as Turnout | null;
   const initialVoters: Record<string, string[]> = {};
   for (const row of voterRows ?? []) {
     (initialVoters[row.option_id] ??= []).push(row.voter_name);
@@ -181,6 +183,7 @@ export default async function PollPage({
           options={options}
           initialResults={initialResults}
           initialVoters={initialVoters}
+          initialTurnout={initialTurnout}
           myOptionIds={myOptionIds}
           myRanks={myRanks}
           initialMatchup={initialMatchup}

@@ -107,6 +107,11 @@ export interface Database {
           position: number;
           approved: boolean;
           created_at: string;
+          /** When the option actually became votable — set to now() on
+           * approval, so it is not the same as created_at for polls using
+           * option_adds_need_approval. Drives the reach denominator in
+           * get_poll_results (supabase/migrations/0008_fair_scoring.sql). */
+          visible_from: string;
         };
         Insert: Partial<Database["public"]["Tables"]["poll_options"]["Row"]> & {
           poll_id: string;
@@ -198,9 +203,25 @@ export interface Database {
           option_id: string;
           label: string;
           image_url: string | null;
+          /** Confidence-adjusted score — orders the results. Roughly 0..1 but
+           * can go slightly negative; a sort key, not a displayable number. */
           score: number;
+          /** Same as `support`; kept under the old name so callers that only
+           * read a raw pick count are unaffected. */
           votes: number;
+          /** Ballots that could have contained this option (exposure). */
+          reach: number;
+          /** Ballots that actually picked it. */
+          support: number;
+          /** support/reach before shrinkage; null when reach is 0. */
+          raw: number | null;
+          /** Mean finishing position — rank polls only, null otherwise. */
+          avg_rank: number | null;
         }[];
+      };
+      get_poll_turnout: {
+        Args: { p_poll_id: string };
+        Returns: { ballots_cast: number; group_size: number }[];
       };
       get_poll_voters: {
         Args: { p_poll_id: string };

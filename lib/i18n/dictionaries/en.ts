@@ -144,8 +144,19 @@ const en = {
   results: {
     noResultsYet: "No results yet.",
     votes: (n: number) => `${n} vote${n === 1 ? "" : "s"}`,
-    rating: (n: number) => `${n} rating`,
     resultsHiddenDefault: "Results are hidden for now.",
+    /** Poll-level denominator, above the bars. */
+    turnout: (voted: number, total: number) =>
+      `${voted} of ${total} member${total === 1 ? "" : "s"} voted`,
+    /** Per option: picks out of the ballots that could have contained it. */
+    supportOf: (picked: number, reach: number) => `${picked} of ${reach}`,
+    percent: (n: number) => `${n}%`,
+    avgRank: (n: number) => `avg #${n}`,
+    wonOf: (won: number, played: number) => `won ${won} of ${played}`,
+    /** Shown when an option was added mid-poll, so its denominator is
+     * smaller than the turnout and the ratio would otherwise mislead. */
+    seenBy: (reach: number, total: number) => `seen by ${reach} of ${total} voters`,
+    notSeenYet: "not yet seen",
   },
   errors: {
     invalidInput: "Invalid input",

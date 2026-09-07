@@ -158,8 +158,14 @@ const he = {
   results: {
     noResultsYet: "אין עדיין תוצאות.",
     votes: votesHe,
-    rating: (n: number) => `דירוג ${n}`,
     resultsHiddenDefault: "התוצאות מוסתרות כרגע.",
+    turnout: (voted: number, total: number) => `${voted} מתוך ${membersHe(total)} הצביעו`,
+    supportOf: (picked: number, reach: number) => `${picked} מתוך ${reach}`,
+    percent: (n: number) => `${n}%`,
+    avgRank: (n: number) => `מקום ממוצע ${n}`,
+    wonOf: (won: number, played: number) => `ניצחה ב-${won} מתוך ${played}`,
+    seenBy: (reach: number, total: number) => `נראתה ל-${reach} מתוך ${total} מצביעים`,
+    notSeenYet: "טרם נראתה",
   },
   errors: {
     invalidInput: "קלט לא תקין",
