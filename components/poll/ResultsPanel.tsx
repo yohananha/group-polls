@@ -101,16 +101,26 @@ export function ResultsPanel({
     return Math.max(frac * 100, score > lo ? 3 : 0);
   }
 
+  // One number per row, not a stack of them. The turnout line above already
+  // says how many ballots exist, so an option's own "x of y" only earns its
+  // place when it disagrees with that — i.e. it was added after some ballots
+  // were already cast, and its stat would otherwise be read with more
+  // confidence than the sample supports.
   function stat(r: ResultRow): string {
     if (r.reach === 0) return t.results.notSeenYet;
     // Bracket reach counts matchups played, not voters, so it reads as a
-    // win record rather than a share of the electorate.
+    // win record rather than a share of the electorate; matchup counts
+    // already vary option to option, so the fraction always belongs here.
     if (isBracket) return t.results.wonOf(r.support, r.reach);
+
+    const late = turnout != null && r.reach < turnout.ballots_cast;
     const ratio = t.results.supportOf(r.support, r.reach);
+
     if (isRank) {
-      return r.avg_rank != null ? `${ratio} · ${t.results.avgRank(r.avg_rank)}` : ratio;
+      const place = r.avg_rank != null ? t.results.avgRank(r.avg_rank) : ratio;
+      return late ? `${place} · ${ratio}` : place;
     }
-    return `${ratio} · ${t.results.percent(Math.round((r.raw ?? 0) * 100))}`;
+    return late ? ratio : t.results.percent(Math.round((r.raw ?? 0) * 100));
   }
 
   return (
@@ -166,10 +176,6 @@ export function ResultsPanel({
       )}
       <ol className="space-y-3.5">
         {results.map((r, i) => {
-          // Fewer ballots could have contained this than have been cast, so it
-          // was added mid-poll. Without saying so, "2 of 3" next to "8 of 12"
-          // reads as a stronger result than it is.
-          const late = !isBracket && turnout != null && r.reach > 0 && r.reach < turnout.ballots_cast;
           return (
             <li key={r.option_id}>
               <div className="flex items-baseline justify-between gap-3 text-sm">
@@ -194,14 +200,11 @@ export function ResultsPanel({
                   }}
                 />
               </div>
-              {late && turnout && (
-                <p className="mt-1.5">
-                  <span className="rounded-full border-2 border-border px-2 py-0.5 text-xs font-bold text-muted-2">
-                    {t.results.seenBy(r.reach, turnout.ballots_cast)}
-                  </span>
-                </p>
-              )}
-              {votersByOption?.[r.option_id] && votersByOption[r.option_id].length > 0 && (
+              {/* On a rank poll almost every voter ranks almost every option, so
+                  this list is close to identical under every row — repeated
+                  clutter, not information. It stays for single/multi, where
+                  it actually distinguishes who picked what. */}
+              {!isRank && votersByOption?.[r.option_id] && votersByOption[r.option_id].length > 0 && (
                 <p className="mt-1 truncate text-xs font-semibold text-muted-2">
                   {votersByOption[r.option_id].join(", ")}
                 </p>

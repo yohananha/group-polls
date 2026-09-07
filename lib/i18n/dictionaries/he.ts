@@ -164,7 +164,6 @@ const he = {
     percent: (n: number) => `${n}%`,
     avgRank: (n: number) => `מקום ממוצע ${n}`,
     wonOf: (won: number, played: number) => `ניצחה ב-${won} מתוך ${played}`,
-    seenBy: (reach: number, total: number) => `נראתה ל-${reach} מתוך ${total} מצביעים`,
     notSeenYet: "טרם נראתה",
   },
   errors: {

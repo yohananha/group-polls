@@ -155,7 +155,6 @@ const en = {
     wonOf: (won: number, played: number) => `won ${won} of ${played}`,
     /** Shown when an option was added mid-poll, so its denominator is
      * smaller than the turnout and the ratio would otherwise mislead. */
-    seenBy: (reach: number, total: number) => `seen by ${reach} of ${total} voters`,
     notSeenYet: "not yet seen",
   },
   errors: {
